@@ -13,3 +13,12 @@ import urllib.request
 
 sauce = urllib.request.urlopen('http://georgia.bizhwy.com/businesses.php?c=349').read()
 
+soup = bs.BeautifulSoup(sauce, 'lxml')
+
+#print(soup.find_all('b'))
+
+NameList = list()
+for bold in soup.find_all('b'):
+    NameList.append(bold.string)
+
+print(NameList)
