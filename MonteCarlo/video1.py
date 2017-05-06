@@ -31,15 +31,15 @@ def simpleBettor(funds, initial_wager, wager_count):
     
     while currentWager < wager_count:
         if rolldice(): #if True is resturned this will execute
-            value += wager
-            
+            value = value + wager
         else:
-            value =- wager
+            value = value - wager  #value =- wager why didn't that work, why
+            #did I have to write it out?
             
         currentWager += 1
         print('Funds:', value)
         
-simpleBettor(10000, 100,100)
+simpleBettor(10000, 100, 100)
        
         
         
