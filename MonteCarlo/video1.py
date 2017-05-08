@@ -25,6 +25,68 @@ def rolldice():
 #        print (roll) 
 #        print ('You win')
         return True
+
+def doubleBettor(funds, initial_wager, wager_count):
+    value = funds
+    wager = initial_wager
+    global broke_count 
+    
+    wX = []
+    vY = []
+    
+    currentWager = 1
+    previousWager = 'win'
+    previousWagerAmount = initial_wager
+    
+    while currentWager <= wager_count: 
+        if previousWager == 'win':
+            if rolldice():
+                value = value + wager
+                wX.append(currentWager)
+                vY.append(value)
+            else:
+                value = value - wager
+                previousWager == 'loss'
+                previousWagerAmount = wager
+                wX.append(currentWager)
+                vY.append(value)
+                if value < 0:
+                    broke_count += 1
+                    break
+        elif previousWager == 'loss':
+            if rolldice():
+                wager = previousWagerAmount * 2
+                value = value + wager
+                wager = initial_wager
+                previousWager = 'win' 
+                wX.append(currentWager)
+                vY.append(value)
+            else:
+                wager = previousWagerAmount * 2
+                value = value - wager
+                if value < 0:
+                    broke_count += 1
+                    break
+                    
+                    
+                previousWager = 'loss'
+                previousWagerAmount = wager
+                wX.append(currentWager)
+                vY.append(value)
+            
+        currentWager += 1 
+        
+    plt.plot(wX, vY)
+            
+broke_count = 0           
+            
+for x in range(100):
+    doubleBettor(10000, 100, 10000)
+    
+    
+    
+print('death rate', (broke_count / 100) * 100 )
+#print('survival rate',  )
         
 def simpleBettor(funds, initial_wager, wager_count):
     value = funds
@@ -51,9 +113,9 @@ def simpleBettor(funds, initial_wager, wager_count):
     #print('Funds:', value)
     plt.plot(wX, vY)
         
-for x in range(100):
-    simpleBettor(10000, 100, 100)
-       
+#for x in range(100):
+#    simpleBettor(10000, 100, 100)
+#       
         
         
         
