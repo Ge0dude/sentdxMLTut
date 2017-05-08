@@ -76,19 +76,20 @@ def doubleBettor(funds, initial_wager, wager_count):
             
         currentWager += 1 
         
-    plt.plot(wX, vY)
+    plt.plot(wX, vY, 'c')
             
 broke_count = 0           
             
-for x in range(100):
-    doubleBettor(10000, 100, 10000)
+#for x in range(100):
+#    doubleBettor(10000, 100, 10000)
     
     
     
-print('death rate', (broke_count / 100) * 100 )
+
 #print('survival rate',  )
         
 def simpleBettor(funds, initial_wager, wager_count):
+    global broke_count
     value = funds
     wager = initial_wager
     
@@ -110,13 +111,25 @@ def simpleBettor(funds, initial_wager, wager_count):
             
             
         currentWager += 1
+        
+    if value < 0:
+        value = 'broke'
+        broke_count += 1
     #print('Funds:', value)
-    plt.plot(wX, vY)
+    plt.plot(wX, vY, 'k')
+
+
+
+startingFunds = 10000
+wagerSize = 100
+wagerCount = 10000
         
-#for x in range(100):
-#    simpleBettor(10000, 100, 100)
-#       
-        
+for x in range(100):
+    simpleBettor(startingFunds, wagerSize, wagerCount)
+    doubleBettor(startingFunds, wagerSize, wagerCount)
+    
+       
+#print('death rate', (broke_count / 100) * 100 )        
         
         
         
