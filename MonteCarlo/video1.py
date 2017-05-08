@@ -50,12 +50,14 @@ def doubleBettor(funds, initial_wager, wager_count):
                 previousWagerAmount = wager
                 wX.append(currentWager)
                 vY.append(value)
-                if value < 0:
+                if value <= 0:
                     broke_count += 1
                     break
         elif previousWager == 'loss':
             if rolldice():
                 wager = previousWagerAmount * 2
+                if (value - wager) < 0:
+                    wager = value
                 value = value + wager
                 wager = initial_wager
                 previousWager = 'win' 
@@ -63,17 +65,18 @@ def doubleBettor(funds, initial_wager, wager_count):
                 vY.append(value)
             else:
                 wager = previousWagerAmount * 2
+                if (value - wager) < 0:
+                    wager = value
                 value = value - wager
-                if value < 0:
-                    broke_count += 1
-                    break
-                    
-                    
                 previousWager = 'loss'
                 previousWagerAmount = wager
                 wX.append(currentWager)
                 vY.append(value)
-            
+                if value <= 0:
+                    broke_count += 1
+                    break
+                    
+
         currentWager += 1 
         
     plt.plot(wX, vY, 'c')
@@ -112,7 +115,7 @@ def simpleBettor(funds, initial_wager, wager_count):
             
         currentWager += 1
         
-    if value < 0:
+    if value <= 0:
         value = 'broke'
         broke_count += 1
     #print('Funds:', value)
