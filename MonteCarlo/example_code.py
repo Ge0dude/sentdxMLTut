@@ -1,18 +1,9 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Mon May  8 16:41:25 2017
-
-@author: brendontucker
-"""
-
 import random
 import matplotlib
 import matplotlib.pyplot as plt
 import time
 
-sampleSize = 100
-
+sampleSize = 1000
 startingFunds = 10000
 wagerSize = 100
 wagerCount = 1000
@@ -30,9 +21,10 @@ def rollDice():
     elif 100 > roll >= 50:
         return True
 
-################################################## edit in color
 def doubler_bettor(funds,initial_wager,wager_count,color):
-
+    global doubler_busts
+    #####################
+    global doubler_profits
     value = funds
     wager = initial_wager
     wX = []
@@ -55,11 +47,10 @@ def doubler_bettor(funds,initial_wager,wager_count,color):
                 vY.append(value)
                 if value < 0:
                     currentWager += 10000000000000000
+                    doubler_busts += 1
         elif previousWager == 'loss':
             if rollDice():
                 wager = previousWagerAmount * 2
-
-                # this makes it so we just bet all that is left. 
                 if (value - wager) < 0:
                     wager = value
                     
@@ -70,7 +61,6 @@ def doubler_bettor(funds,initial_wager,wager_count,color):
                 vY.append(value)
             else:
                 wager = previousWagerAmount * 2
-                # this makes it so we just bet all that is left. 
                 if (value - wager) < 0:
                     wager = value
                 value -= wager
@@ -79,22 +69,26 @@ def doubler_bettor(funds,initial_wager,wager_count,color):
                 wX.append(currentWager)
                 vY.append(value)
 
-
-                # change to equals zero!
                 if value <= 0:
                     currentWager += 10000000000000000
+                    doubler_busts += 1
 
         currentWager += 1
-    ########################### this guy edits color #
     plt.plot(wX,vY,color)
+    #####################
+    if value > funds:
+        doubler_profits+=1
+        
 
 
 '''
 Simple bettor, betting the same amount each time.
 '''
-#####                                           color#
-def simple_bettor(funds,initial_wager,wager_count,color):
 
+def simple_bettor(funds,initial_wager,wager_count,color):
+    global simple_busts
+    #####################
+    global simple_profits
 
     value = funds
     wager = initial_wager
@@ -103,6 +97,8 @@ def simple_bettor(funds,initial_wager,wager_count,color):
     currentWager = 1
     while currentWager <= wager_count:
         if rollDice():
+            if (value - wager) <= 0:
+                wager = value
             value += wager
             wX.append(currentWager)
             vY.append(value)
@@ -111,16 +107,27 @@ def simple_bettor(funds,initial_wager,wager_count,color):
             wX.append(currentWager)
             vY.append(value)
 
-            ### change this part, not lessthan or equal zero, it is zero
             if value <= 0:
                 currentWager += 10000000000000000
+                simple_busts +=1
         currentWager += 1
-
-    # this guy goes green #
     plt.plot(wX,vY,color)
+    #####################
+    if value > funds:
+        simple_profits+=1
 
     
 x = 0
+
+
+
+simple_busts = 0.0
+doubler_busts = 0.0
+
+#####################
+simple_profits = 0.0
+doubler_profits = 0.0
+
 
 while x < sampleSize:             
     simple_bettor(startingFunds,wagerSize,wagerCount,'c')
@@ -128,8 +135,15 @@ while x < sampleSize:
     doubler_bettor(startingFunds,wagerSize,wagerCount,'k')
     x+=1
 
+
+
+print(('Simple Bettor Bust Chances:', (simple_busts/sampleSize)*100.00))
+print(('Doubler Bettor Bust Chances:', (doubler_busts/sampleSize)*100.00))
+
+print (('Simple Bettor Profit Chances:', (simple_profits/sampleSize)*100.00))
+print(('Doubler Bettor Profit Chances:', (doubler_profits/sampleSize)*100.00))
+    
+
 plt.axhline(0, color = 'r')
 plt.ylabel('Account Value')
 plt.xlabel('Wager Count')
-plt.show()
-		

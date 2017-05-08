@@ -21,7 +21,7 @@ def rolldice():
 #        print (roll) 
 #        print ('You lost')
         return False
-    elif 100 > roll >= 51:
+    elif 100 > roll >= 50:
 #        print (roll) 
 #        print ('You win')
         return True
